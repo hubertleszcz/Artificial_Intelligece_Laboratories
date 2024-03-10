@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from data import get_data, inspect_data, split_data
+import RegressionTools as tools
 
 data = get_data()
 inspect_data(data)
@@ -19,13 +20,22 @@ train_data, test_data = split_data(data)
 y_train = train_data['MPG'].to_numpy()
 x_train = train_data['Weight'].to_numpy()
 
+
 y_test = test_data['MPG'].to_numpy()
 x_test = test_data['Weight'].to_numpy()
 
 # TODO: calculate closed-form solution
-theta_best = [0, 0]
+
+extendedTrainData = tools.extendDataSet(train_data)
+theta_best = tools.closedFormSolution(extendedTrainData, y_train)
+
+predictedData = np.matmul( extendedTrainData, theta_best)
+print(predictedData)
 
 # TODO: calculate error
+
+MSE = tools.calculateMeanSquareError(y_train, predictedData)
+print(MSE)
 
 # plot the regression line
 x = np.linspace(min(x_test), max(x_test), 100)

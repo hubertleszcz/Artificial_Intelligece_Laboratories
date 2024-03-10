@@ -19,14 +19,14 @@ def get_data():
 
 
 def inspect_data(dataset):
-    print('Dataset shape:')
-    print(dataset.shape)
+   # print('Dataset shape:')
+    #print(dataset.shape)
 
-    print('Tail:')
-    print(dataset.tail())
+    #print('Tail:')
+   # print(dataset.tail())
 
-    print('Statistics:')
-    print(dataset.describe().transpose())
+    #print('Statistics:')
+    #print(dataset.describe().transpose())
 
     sns.pairplot(dataset[['MPG', 'Cylinders', 'Displacement', 'Weight']], diag_kind='kde')
     plt.show()
