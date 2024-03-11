@@ -27,14 +27,13 @@ x_test = test_data['Weight'].to_numpy().reshape(-1, 1)
 # TODO: calculate closed-form solution
 
 extendedTrainData = tools.extendDataSet(x_train)
-
 theta_best = tools.closedFormSolution(extendedTrainData, y_train)
 print(theta_best)
 
 
 extendedTestData = tools.extendDataSet(x_test)
-
 predictedData = np.dot(extendedTestData, theta_best)
+
 # TODO: calculate error
 MSE = tools.calculateMeanSquareError(y_test, predictedData)
 print(MSE)
@@ -49,26 +48,24 @@ plt.ylabel('MPG')
 plt.show()
 
 # TODO: standardization
-
 standarizedXData = tools.standarize(x_train, x_train)
-#print(len(standarizedXData))
-
 standarizedYData = tools.standarize(y_train, y_train)
-#print(standarizedYData)
 
 # TODO: calculate theta using Batch Gradient Descent
-thetaForGradient = np.random.rand(1, 2)
-print(thetaForGradient)
-learningRate = 0.1
-thetaGradient = tools.getGradientDescent(thetaForGradient, learningRate, standarizedXData, standarizedYData)
-thetaGradient = thetaGradient.T
+extendedXData = tools.extendDataSet(standarizedXData)
+thetaForGradient = np.random.rand(2)
+print("Theta for gradient: ", thetaForGradient)
+thetaGradient = tools.getGradientDescent(thetaForGradient, extendedXData , standarizedYData)
+print(thetaGradient)
 
 
 # TODO: calculate error
 standarizedXTest = tools.standarize(x_test, x_train)
 standarizedYTest = tools.standarize(y_test, y_train)
-predictedGradientData = tools.extendDataSet(standarizedXTest).dot(thetaGradient)
-MSE = tools.calculateMeanSquareError(standarizedYTest, predictedGradientData)
+extendedStandarizedTest = tools.extendDataSet(standarizedXTest)
+predictedGradientData = np.dot(extendedStandarizedTest, thetaGradient)
+restandarizedPrediction = tools.reverseStandarizization(predictedGradientData, y_train)
+MSE = tools.calculateMeanSquareError(y_test, restandarizedPrediction)
 print(MSE)
 
 # plot the regression line

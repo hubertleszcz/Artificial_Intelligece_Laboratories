@@ -36,19 +36,19 @@ def reverseStandarizization(data, population):
 
 def gradientMSE(X, theta, yVector):
     m = len(yVector)
-    yVector = yVector.reshape(-1, 1)
     return (2/m) * np.dot(np.transpose(X), (np.dot(X, theta) - yVector))
 
 
-def getGradientDescent(theta, learningRate, dataMatrix, yVector):
+def getGradientDescent(theta, dataMatrix, yVector):
     loopIterator = 100
     currentMSE = 100
     previousMSE = 100
+    learningRate = 0.1
     for _ in range(loopIterator):
         theta = theta - learningRate * gradientMSE(dataMatrix, theta, yVector)
         previousMSE = currentMSE
         currentMSE = calculateMeanSquareError(yVector, np.dot(dataMatrix, theta))
         #if abs((currentMSE - previousMSE)).any() <= 1e-8:
-         #   break
+        #   break
 
     return theta
