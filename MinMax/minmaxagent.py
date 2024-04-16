@@ -5,12 +5,13 @@ import copy
 
 class MinMaxAgent:
 
-    def __init__(self, player):
+    def __init__(self, player, heuristicOn):
         self.my_token = player
         if self.my_token == 'x':
             self.opponent_token = 'o'
         else:
             self.opponent_token = 'x'
+        self.heuristicOn = heuristicOn
 
     def heuristics(self, connect4):
         result = 0
@@ -31,10 +32,6 @@ class MinMaxAgent:
                 result = result + 0.02
             elif opponentTokens == 2 and blankSpaces == 2:
                 result = result - 0.02
-            elif myTokens == 2 and opponentTokens == 1:
-                result = result + 0.001
-            elif opponentTokens and myTokens == 1:
-                result = result - 0.001
         return result
 
     def M(self, connect4, x, d):
@@ -46,14 +43,16 @@ class MinMaxAgent:
             else:
                 return -1
         elif d == 0:
-            return self.heuristics(connect4)
+            if self.heuristicOn:
+                return self.heuristics(connect4)
+            return 0
         else:
             if x == 1:
                 best_result = -2
-                for i in range(len(connect4.possible_drops())):
+                for i in connect4.possible_drops():
                     tmpConnect4 = copy.deepcopy(connect4)
                     try:
-                        tmpConnect4.drop_token(connect4.possible_drops()[i])
+                        tmpConnect4.drop_token(i)
                         value = self.M(tmpConnect4, 0, d-1)
                         best_result = max(value, best_result)
                     except GameplayException:
@@ -61,10 +60,10 @@ class MinMaxAgent:
                 return best_result
             else:
                 best_result = 2
-                for i in range(len(connect4.possible_drops())):
+                for i in connect4.possible_drops():
                     tmpConnect4 = copy.deepcopy(connect4)
                     try:
-                        tmpConnect4.drop_token(connect4.possible_drops()[i])
+                        tmpConnect4.drop_token(i)
                         value = self.M(tmpConnect4, 1, d-1)
                         best_result = min(value, best_result)
                     except GameplayException:
